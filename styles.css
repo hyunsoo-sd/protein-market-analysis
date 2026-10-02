@@ -16,10 +16,12 @@
 
 *{box-sizing:border-box}
 html,body{margin:0;height:100%}
+html{background:var(--bg)}
 body{
   background:radial-gradient(1200px 800px at 15% -10%, #14204a 0%, transparent 55%),
              radial-gradient(1000px 700px at 95% 110%, #2a1250 0%, transparent 55%),
-             var(--bg);
+             var(--bg) !important;
+  background-color:var(--bg) !important;
   color:var(--ink);
   font-family:"Pretendard",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Malgun Gothic",sans-serif;
   -webkit-font-smoothing:antialiased;
@@ -35,8 +37,8 @@ body{
 @keyframes float2{50%{transform:translate(-140px,-70px) scale(1.15)}}
 @keyframes float3{50%{transform:translate(-90px,120px) scale(.9)}}
 
-.reveal{position:relative;z-index:1;color:var(--ink)}
-.reveal-viewport,.reveal{background:transparent !important;background-color:transparent !important}
+.reveal{position:relative;z-index:1;color:var(--ink);background:transparent !important}
+html.reveal-full-page{background:var(--bg) !important}
 .reveal .slides{text-align:left}
 .reveal .slides section{height:100%;padding:42px 64px}
 .reveal .progress{color:var(--accent);height:4px}
