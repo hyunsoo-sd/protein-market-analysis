@@ -38,6 +38,12 @@
     const mr = S.mostReviewed;
     if (mr) set('ins4', `리뷰가 가장 많은 상품은 “${mr.name}” (${Number(mr.reviews).toLocaleString('ko-KR')}개)로, 저가·대용량 실속형 수요가 큼을 보여줍니다.`);
 
+    const m = D.methodology || {};
+    const mEl = document.getElementById('method-note');
+    if (mEl && m.note) {
+      mEl.innerHTML = `<span class="mtag">방법론</span>판매처 원본 <b>${m.originalCount}</b>건 중 단백질과 무관한 <b>${m.excludedCount}</b>건을 제외하고, 최종 <b>${m.analysisCount}</b>건(가격 확인 ${m.pricedCount}건)으로 분석했습니다. ${m.criteria || ''}`;
+    }
+
     // source links
     const searchQ = encodeURIComponent('프로틴');
     const links = {

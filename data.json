@@ -1,13 +1,37 @@
 {
-  "generatedAt": "2026-10-02T03:40:14.915Z",
+  "generatedAt": "2026-10-02T04:53:09.087Z",
   "query": "프로틴",
   "sources": [
     "Coupang",
     "Danawa",
     "NaverShopping"
   ],
-  "itemCount": 24,
-  "pricedCount": 22,
+  "itemCount": 22,
+  "pricedCount": 20,
+  "methodology": {
+    "note": "판매처 검색 결과에서 단백질과 무관한 항목을 제외한 프레젠테이션용 데이터셋입니다.",
+    "criteria": "① 휴대폰 액세서리 등 단백질 제품이 아닌 품목, ② 반려동물용 제품을 제외했습니다.",
+    "originalCount": 24,
+    "excludedCount": 2,
+    "analysisCount": 22,
+    "pricedCount": 20,
+    "excluded": [
+      {
+        "source": "NaverShopping",
+        "name": "후디스 헬스케어 아이폰 케이스",
+        "price": 10000,
+        "reason": "휴대폰 액세서리(단백질 제품 아님)"
+      },
+      {
+        "source": "NaverShopping",
+        "name": "다이어트 위한 반려 동물 단백질 음료",
+        "price": 25000,
+        "reason": "반려동물용 제품(인체용 단백질 아님)"
+      }
+    ],
+    "originalFile": "protein_products.csv (원본, 보존)",
+    "cleanedFile": "protein_products.cleaned.csv (프레젠테이션용)"
+  },
   "items": [
     {
       "source": "Coupang",
@@ -211,16 +235,6 @@
     },
     {
       "source": "NaverShopping",
-      "name": "후디스 헬스케어 아이폰 케이스",
-      "brand": "후디스",
-      "price": 10000,
-      "mall": "헬스케어",
-      "rating": 4.88,
-      "reviews": 703,
-      "url": "https://ader.naver.com/v1/zC6W1PkYOxBNWYW-g8COhnQjIf-DU62mJSlCszHi5E_rCNuscc1U7GNjfLvhMYNK7py60lv6cU7Wom0XnkCF6vopdlwBsDoZzwuDQcFTeG9L1QTOgP0sb38eqZH_fcoYE-AJ1GKVpXfYrHdyC4x7F1BiDep6nPVaJuxgaSzTyjSMX6hN27m-14D545BTblnNLlQvrSmcXpfds9uWtcyp9q9dROyYbWG6E00NuY48rgPHfa0QTFtgk3Drkggv_QbbNeMIsGSPHUkbDTJdHh3q5DcLej1XO9s5LUFcL4ETGWST-id3_NtR5uyBiFdAoFVHRHePndF-vz5RryiYYqZEcA==?c=naver.search.pc.plsearch&t=0"
-    },
-    {
-      "source": "NaverShopping",
       "name": "프로틴 통곡물 미숫가루맛 단백질 보충제",
       "brand": "헬스케어",
       "price": 35000,
@@ -234,16 +248,6 @@
       "name": "홀 블렌딩브랜드스토어 단백질 바",
       "brand": "홀블렌딩",
       "price": 18000,
-      "mall": null,
-      "rating": null,
-      "reviews": null,
-      "url": "https://ader.naver.com/v1/zC6W1PkYOxBNWYW-g8COhnQjIf-DU62mJSlCszHi5E_rCNuscc1U7GNjfLvhMYNK7py60lv6cU7Wom0XnkCF6vopdlwBsDoZzwuDQcFTeG9L1QTOgP0sb38eqZH_fcoYE-AJ1GKVpXfYrHdyC4x7F1BiDep6nPVaJuxgaSzTyjSMX6hN27m-14D545BTblnNLlQvrSmcXpfds9uWtcyp9q9dROyYbWG6E00NuY48rgPHfa0QTFtgk3Drkggv_QbbNeMIsGSPHUkbDTJdHh3q5DcLej1XO9s5LUFcL4ETGWST-id3_NtR5uyBiFdAoFVHRHePndF-vz5RryiYYqZEcA==?c=naver.search.pc.plsearch&t=0"
-    },
-    {
-      "source": "NaverShopping",
-      "name": "다이어트 위한 반려 동물 단백질 음료",
-      "brand": null,
-      "price": 25000,
       "mall": null,
       "rating": null,
       "reviews": null,
@@ -272,12 +276,12 @@
       },
       {
         "source": "NaverShopping",
-        "totalListed": 8,
-        "count": 6,
-        "avg": 35367,
-        "min": 10000,
+        "totalListed": 6,
+        "count": 4,
+        "avg": 44300,
+        "min": 18000,
         "max": 81700,
-        "median": 30000
+        "median": 38750
       }
     ],
     "brands": [
@@ -290,11 +294,6 @@
         "brand": "오가인",
         "count": 3,
         "avg": 63517
-      },
-      {
-        "brand": "후디스",
-        "count": 1,
-        "avg": 10000
       },
       {
         "brand": "홀블렌딩",
@@ -365,11 +364,11 @@
     "priceBuckets": [
       {
         "label": "~2만원",
-        "count": 3
+        "count": 2
       },
       {
         "label": "2~3만원",
-        "count": 3
+        "count": 2
       },
       {
         "label": "3~4만원",
@@ -384,16 +383,16 @@
         "count": 6
       }
     ],
-    "avgPrice": 45256,
-    "medianPrice": 41150,
+    "avgPrice": 48032,
+    "medianPrice": 44200,
     "cheapest": {
       "source": "NaverShopping",
-      "name": "후디스 헬스케어 아이폰 케이스",
-      "brand": "후디스",
-      "price": 10000,
-      "mall": "헬스케어",
-      "rating": 4.88,
-      "reviews": 703,
+      "name": "홀 블렌딩브랜드스토어 단백질 바",
+      "brand": "홀블렌딩",
+      "price": 18000,
+      "mall": null,
+      "rating": null,
+      "reviews": null,
       "url": "https://ader.naver.com/v1/zC6W1PkYOxBNWYW-g8COhnQjIf-DU62mJSlCszHi5E_rCNuscc1U7GNjfLvhMYNK7py60lv6cU7Wom0XnkCF6vopdlwBsDoZzwuDQcFTeG9L1QTOgP0sb38eqZH_fcoYE-AJ1GKVpXfYrHdyC4x7F1BiDep6nPVaJuxgaSzTyjSMX6hN27m-14D545BTblnNLlQvrSmcXpfds9uWtcyp9q9dROyYbWG6E00NuY48rgPHfa0QTFtgk3Drkggv_QbbNeMIsGSPHUkbDTJdHh3q5DcLej1XO9s5LUFcL4ETGWST-id3_NtR5uyBiFdAoFVHRHePndF-vz5RryiYYqZEcA==?c=naver.search.pc.plsearch&t=0"
     },
     "priciest": {
@@ -426,7 +425,7 @@
       "reviews": 49199,
       "url": "https://www.coupang.com/vp/products/7411095382?itemId=13466502453&vendorItemId=76137436686"
     },
-    "avgRating": 4.62,
-    "ratingCount": 13
+    "avgRating": 4.6,
+    "ratingCount": 12
   }
 }
