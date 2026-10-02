@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>프로틴 시장 분석 · 쇼핑 데이터 리포트</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.css" />
+<link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+<div class="bg-orbs" aria-hidden="true">
+  <span class="orb orb-a"></span>
+  <span class="orb orb-b"></span>
+  <span class="orb orb-c"></span>
+</div>
+
+<div class="reveal">
+<div class="slides">
+
+  <!-- 1. TITLE -->
+  <section class="slide slide-title" data-slide="title">
+    <div class="title-hero" id="hero-art" data-img="assets/img/hero.png" aria-hidden="true"></div>
+    <div class="title-inner">
+      <p class="kicker fragment" data-fragment-index="0">PROTEIN MARKET DATA REPORT</p>
+      <h1 class="title-main fragment" data-fragment-index="1">프로틴 시장<br /><span class="grad">가격 분석</span></h1>
+      <p class="title-sub fragment" data-fragment-index="2">
+        쿠팡 · 다나와 · 네이버쇼핑 “프로틴” 검색 결과를 수집해 가격 구조와 브랜드 경쟁을 한눈에 정리했습니다.
+      </p>
+      <div class="badge-row fragment" data-fragment-index="3">
+        <span class="badge badge-cp">쿠팡</span>
+        <span class="badge badge-dn">다나와</span>
+        <span class="badge badge-nv">네이버쇼핑</span>
+      </div>
+      <p class="title-meta fragment" data-fragment-index="4" id="title-meta"></p>
+    </div>
+  </section>
+
+  <!-- 2. OVERVIEW -->
+  <section class="slide" data-slide="overview">
+    <h2 class="h2">수집 개요</h2>
+    <p class="lead">국내 3대 채널에서 동일 키워드로 수집한 결과입니다.</p>
+    <div class="stat-grid">
+      <div class="stat-card reveal-up" data-count="itemCount" data-suffix="개">
+        <span class="stat-num" data-num>0</span>
+        <span class="stat-label">수집 상품</span>
+      </div>
+      <div class="stat-card reveal-up" data-count="pricedCount" data-suffix="개">
+        <span class="stat-num" data-num>0</span>
+        <span class="stat-label">가격 확인 상품</span>
+      </div>
+      <div class="stat-card reveal-up" data-count="summary.avgRating" data-decimals="2">
+        <span class="stat-num" data-num>0</span>
+        <span class="stat-label">평균 평점 (별점 보유)</span>
+      </div>
+      <div class="stat-card reveal-up" data-count="summary.ratingCount" data-suffix="개">
+        <span class="stat-num" data-num>0</span>
+        <span class="stat-label">평점 제공 상품</span>
+      </div>
+    </div>
+    <div class="source-bars" id="overview-source-bars"></div>
+    <p class="footnote">수집 키워드 <b>“프로틴”</b> · 수집일 <span id="gen-date"></span> · Firecrawl 스크래핑</p>
+  </section>
+
+  <!-- 3. KPI PRICE -->
+  <section class="slide" data-slide="kpi">
+    <h2 class="h2">가격 핵심 지표</h2>
+    <p class="lead">가격이 확인된 상품 기준.</p>
+    <div class="kpi-row">
+      <div class="kpi reveal-up"><span class="kpi-num" data-count="summary.avgPrice" data-suffix="원" data-num>0</span><span class="kpi-label">평균가</span></div>
+      <div class="kpi reveal-up"><span class="kpi-num" data-count="summary.medianPrice" data-suffix="원" data-num>0</span><span class="kpi-label">중앙값</span></div>
+      <div class="kpi reveal-up"><span class="kpi-num grad" data-count-id="min" data-suffix="원" data-num>0</span><span class="kpi-label">최저가</span></div>
+      <div class="kpi reveal-up"><span class="kpi-num grad" data-count-id="max" data-suffix="원" data-num>0</span><span class="kpi-label">최고가</span></div>
+    </div>
+    <div class="range-wrap reveal-up">
+      <div class="range-axis">
+        <span id="range-min-lbl"></span>
+        <span id="range-max-lbl"></span>
+      </div>
+      <div class="range-track"><div class="range-fill" id="range-fill"></div><div class="range-median" id="range-median"><i></i><b>중앙값</b></div></div>
+    </div>
+    <p class="footnote">최저/최고가는 1개 상품 특가·대용량 구성 차이가 반영된 값입니다.</p>
+  </section>
+
+  <!-- 4. AVG BY SOURCE -->
+  <section class="slide" data-slide="avg">
+    <h2 class="h2">채널별 평균 가격</h2>
+    <p class="lead">같은 “프로틴” 키워드도 채널마다 평균 단가가 다릅니다.</p>
+    <div class="chart-wrap"><canvas id="chart-avg"></canvas></div>
+    <div class="keyline"><span class="dot dot-cp"></span>쿠팡 <span class="dot dot-dn"></span>다나와 <span class="dot dot-nv"></span>네이버</div>
+  </section>
+
+  <!-- 5. RANGE BY SOURCE -->
+  <section class="slide" data-slide="range">
+    <h2 class="h2">채널별 가격 레인지</h2>
+    <p class="lead">최저–중앙–최고가를 비교해 가격대 폭을 확인합니다.</p>
+    <div class="chart-wrap"><canvas id="chart-range"></canvas></div>
+  </section>
+
+  <!-- 6. PRICE BUCKET -->
+  <section class="slide" data-slide="bucket">
+    <h2 class="h2">가격대 분포</h2>
+    <p class="lead">상품이 어느 가격 구간에 몰려 있는지 봅니다.</p>
+    <div class="bucket-layout">
+      <div class="chart-wrap small"><canvas id="chart-bucket"></canvas></div>
+      <ul class="bucket-legend" id="bucket-legend"></ul>
+    </div>
+  </section>
+
+  <!-- 7. BRANDS -->
+  <section class="slide" data-slide="brands">
+    <h2 class="h2">브랜드 노출 순위</h2>
+    <p class="lead">검색 결과 상위에 반복 등장한 브랜드.</p>
+    <div class="chart-wrap"><canvas id="chart-brand"></canvas></div>
+  </section>
+
+  <!-- 8. RATING vs REVIEWS -->
+  <section class="slide" data-slide="rating">
+    <h2 class="h2">평점 × 리뷰수</h2>
+    <p class="lead">우상단에 가까울수록 “높은 평점 + 많은 리뷰”입니다.</p>
+    <div class="chart-wrap"><canvas id="chart-scatter"></canvas></div>
+    <p class="footnote">평점/리뷰가 노출된 상품만 표시 (버블 크기 = 평점).</p>
+  </section>
+
+  <!-- 9. LEADERBOARDS -->
+  <section class="slide" data-slide="board">
+    <h2 class="h2">리더보드</h2>
+    <div class="board-grid">
+      <div class="board reveal-up">
+        <h3>가성비 TOP 5 <small>낮은 가격</small></h3>
+        <ol class="rank-list" id="cheap-list"></ol>
+      </div>
+      <div class="board reveal-up">
+        <h3>리뷰 TOP 5 <small>많이 검증된</small></h3>
+        <ol class="rank-list" id="review-list"></ol>
+      </div>
+    </div>
+  </section>
+
+  <!-- 10. INSIGHTS -->
+  <section class="slide" data-slide="insight">
+    <h2 class="h2">인사이트</h2>
+    <ul class="insight-list">
+      <li class="fragment" data-fragment-index="0"><b>가격 양극화.</b> <span id="ins1"></span></li>
+      <li class="fragment" data-fragment-index="1"><b>채널별 단가 차.</b> <span id="ins2"></span></li>
+      <li class="fragment" data-fragment-index="2"><b>브랜드 쏠림.</b> <span id="ins3"></span></li>
+      <li class="fragment" data-fragment-index="3"><b>검증된 인기.</b> <span id="ins4"></span></li>
+    </ul>
+  </section>
+
+  <!-- 11. CLOSING -->
+  <section class="slide slide-end" data-slide="end">
+    <div class="end-art" id="end-art" data-img="assets/img/outro.png" aria-hidden="true"></div>
+    <h2 class="h2">정리</h2>
+    <p class="lead end-lead">“프로틴” 시장은 <b>저가 실속형</b>과 <b>고가 프리미엄</b>이 뚜렷하게 나뉘고, 채널별 가격 차가 큽니다.</p>
+    <div class="src-cards">
+      <a class="src-card" id="src-coupang" target="_blank" rel="noopener"><b>쿠팡</b><span></span></a>
+      <a class="src-card" id="src-danawa" target="_blank" rel="noopener"><b>다나와</b><span></span></a>
+      <a class="src-card" id="src-naver" target="_blank" rel="noopener"><b>네이버쇼핑</b><span></span></a>
+    </div>
+    <p class="footnote">데이터 출처: 각 사 공개 검색 결과(개인·비조직적 조회 목적). 가격·재고는 시점에 따라 변동됩니다.</p>
+  </section>
+
+</div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<script src="data.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.js"></script>
+<script src="deck.js"></script>
+</body>
+</html>
