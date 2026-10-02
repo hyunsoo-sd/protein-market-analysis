@@ -81,6 +81,7 @@
         <span class="stat-label">평점 제공 상품</span>
       </div>
     </div>
+    <div class="clean-flow reveal-up" id="clean-flow"></div>
     <div class="source-bars" id="overview-source-bars"></div>
     <p class="method-note reveal-up" id="method-note"></p>
     <p class="footnote">수집 키워드 <b>“프로틴”</b> · 수집일 <span id="gen-date"></span> · Firecrawl 스크래핑</p>
@@ -110,6 +111,7 @@
   <section class="slide" data-slide="avg">
     <h2 class="h2">채널별 평균 가격</h2>
     <p class="lead">같은 “프로틴” 키워드도 채널마다 평균 단가가 다릅니다.</p>
+    <p class="message" id="avg-message"></p>
     <div class="chart-wrap"><canvas id="chart-avg"></canvas></div>
     <div class="keyline"><span class="dot dot-cp"></span>쿠팡 <span class="dot dot-dn"></span>다나와 <span class="dot dot-nv"></span>네이버</div>
   </section>
@@ -134,28 +136,33 @@
   <!-- 7. BRANDS -->
   <section class="slide" data-slide="brands">
     <h2 class="h2">브랜드 노출 순위</h2>
-    <p class="lead">검색 결과 상위에 반복 등장한 브랜드.</p>
+    <p class="lead">검색 결과에서 <b>반복적으로 등장</b>하는 브랜드일수록 시장 노출이 큽니다.</p>
+    <p class="message" id="brand-message"></p>
     <div class="chart-wrap"><canvas id="chart-brand"></canvas></div>
   </section>
 
   <!-- 8. RATING vs REVIEWS -->
   <section class="slide" data-slide="rating">
     <h2 class="h2">평점 × 리뷰수</h2>
-    <p class="lead">우상단에 가까울수록 “높은 평점 + 많은 리뷰”입니다.</p>
+    <p class="lead">우상단에 가까울수록 “높은 평점 + 많은 리뷰”, 즉 신뢰도가 높은 상품입니다.</p>
+    <div class="bubble-legend" id="bubble-legend">
+      <span class="bl-title">버블 크기 = 평점</span>
+      <span class="bl-scale"><i style="width:8px;height:8px"></i><i style="width:13px;height:13px"></i><i style="width:19px;height:19px"></i></span>
+      <span class="bl-note">작음 → 큼 · 평점·리뷰가 노출된 상품만 표시</span>
+    </div>
     <div class="chart-wrap"><canvas id="chart-scatter"></canvas></div>
-    <p class="footnote">평점/리뷰가 노출된 상품만 표시 (버블 크기 = 평점).</p>
   </section>
 
   <!-- 9. LEADERBOARDS -->
   <section class="slide" data-slide="board">
     <h2 class="h2">리더보드</h2>
     <div class="board-grid">
-      <div class="board reveal-up">
-        <h3>가성비 TOP 5 <small>낮은 가격</small></h3>
+      <div class="board board-cheap reveal-up">
+        <h3 class="board-title">가성비 TOP 5 <small>낮은 가격</small></h3>
         <ol class="rank-list" id="cheap-list"></ol>
       </div>
-      <div class="board reveal-up">
-        <h3>리뷰 TOP 5 <small>많이 검증된</small></h3>
+      <div class="board board-review reveal-up">
+        <h3 class="board-title">리뷰 TOP 5 <small>많이 검증된</small></h3>
         <ol class="rank-list" id="review-list"></ol>
       </div>
     </div>
@@ -164,25 +171,26 @@
   <!-- 10. INSIGHTS -->
   <section class="slide" data-slide="insight">
     <h2 class="h2">인사이트</h2>
-    <ul class="insight-list">
-      <li class="reveal-up" style="animation-delay:.05s"><b>가격 양극화.</b> <span id="ins1"></span></li>
-      <li class="reveal-up" style="animation-delay:.22s"><b>채널별 단가 차.</b> <span id="ins2"></span></li>
-      <li class="reveal-up" style="animation-delay:.39s"><b>브랜드 쏠림.</b> <span id="ins3"></span></li>
-      <li class="reveal-up" style="animation-delay:.56s"><b>검증된 인기.</b> <span id="ins4"></span></li>
-    </ul>
+    <p class="lead">앞선 차트들이 말하는 네 가지 핵심 결론입니다.</p>
+    <div class="insight-grid" id="insight-grid"></div>
   </section>
 
   <!-- 11. CLOSING -->
   <section class="slide slide-end" data-slide="end">
     <div class="end-art" id="end-art" data-img="assets/img/outro.svg" aria-hidden="true"></div>
-    <h2 class="h2">정리</h2>
-    <p class="lead end-lead">“프로틴” 시장은 <b>저가 실속형</b>과 <b>고가 프리미엄</b>이 뚜렷하게 나뉘고, 채널별 가격 차가 큽니다.</p>
-    <div class="src-cards">
-      <a class="src-card" id="src-coupang" target="_blank" rel="noopener"><b>쿠팡</b><span></span></a>
-      <a class="src-card" id="src-danawa" target="_blank" rel="noopener"><b>다나와</b><span></span></a>
-      <a class="src-card" id="src-naver" target="_blank" rel="noopener"><b>네이버쇼핑</b><span></span></a>
+    <div class="end-inner">
+      <p class="kicker">CONCLUSION</p>
+      <h2 class="h2">정리</h2>
+      <p class="outro-statement">저가 실속형과 고가 프리미엄, <span class="grad">두 시장으로 갈라진 “프로틴”</span>.</p>
+      <div class="end-divider"></div>
+      <p class="end-lead">동일 키워드에서도 채널별 평균 단가가 갈리고, 검색 상위에는 <b>뉴욕웨이·오가인</b> 같은 브랜드가 반복 등장합니다. 가격만 보지 말고 <b>리뷰 검증</b>을 함께 보세요.</p>
+      <div class="src-cards">
+        <a class="src-card" id="src-coupang" target="_blank" rel="noopener"><b>쿠팡</b><span></span></a>
+        <a class="src-card" id="src-danawa" target="_blank" rel="noopener"><b>다나와</b><span></span></a>
+        <a class="src-card" id="src-naver" target="_blank" rel="noopener"><b>네이버쇼핑</b><span></span></a>
+      </div>
     </div>
-    <p class="footnote">데이터 출처: 각 사 공개 검색 결과(개인·비조직적 조회 목적). 가격·재고는 시점에 따라 변동됩니다.</p>
+    <p class="footnote">데이터 출처: 각 사 공개 검색 결과(개인·비조직적 조회 목적) · 방법론: 무관 검색 결과 제외 후 22건 분석 · 가격·재고는 시점에 따라 변동</p>
   </section>
 
 </div>

@@ -22,21 +22,19 @@
     set('gen-date', dateStr);
 
     const stats = S.sourceStats || [];
-    const cheap = S.cheapest, pricey = S.priciest;
+    const setHTML = (id, v) => { const el = document.getElementById(id); if (el) el.innerHTML = v; };
 
-    set('ins1', `${krw(cheap && cheap.price)}부터 ${krw(pricey && pricey.price)}까지 약 ${Math.round(((pricey.price - cheap.price) / cheap.price) * 100)}% 차이가 납니다. “${cheap.name}”이 최저가, “${pricey.name}”이 최고가였습니다.`);
-
-    const sorted = [...stats].filter(s => s.avg).sort((a, b) => a.avg - b.avg);
-    if (sorted.length >= 2) {
-      const lo = sorted[0], hi = sorted[sorted.length - 1];
-      set('ins2', `${hi.source} 평균 ${krw(hi.avg)} vs ${lo.source} 평균 ${krw(lo.avg)} — 채널 선택만으로 평균 단가가 약 ${krw(hi.avg - lo.avg)} 벌어집니다.`);
+    const byAvg = [...stats].filter(s => s.avg).sort((a, b) => a.avg - b.avg);
+    const loAvg = byAvg[0], hiAvg = byAvg[byAvg.length - 1];
+    if (hiAvg && loAvg) {
+      setHTML('avg-message', `가장 비싼 채널은 <b>${labelOf(hiAvg.source)}</b> ${krw(hiAvg.avg)}, 가장 저렴한 채널은 <b>${labelOf(loAvg.source)}</b> ${krw(loAvg.avg)} — 채널만 바꿔도 평균 <b>${krw(hiAvg.avg - loAvg.avg)}</b> 차이.`);
     }
 
-    const b = (S.brands || [])[0];
-    if (b) set('ins3', `가격 확인 상품 중 “${b.brand}”가 ${b.count}회로 가장 많이 노출됐고, 평균 ${krw(b.avg)}대를 형성했습니다.`);
-
-    const mr = S.mostReviewed;
-    if (mr) set('ins4', `리뷰가 가장 많은 상품은 “${mr.name}” (${Number(mr.reviews).toLocaleString('ko-KR')}개)로, 저가·대용량 실속형 수요가 큼을 보여줍니다.`);
+    const maxBrandCount = (S.brands && S.brands[0]) ? S.brands[0].count : 0;
+    const tied = (S.brands || []).filter(b => b.count === maxBrandCount);
+    if (tied.length) {
+      setHTML('brand-message', `검색 상위에서 <b>${tied.map(b => b.brand).join(' · ')}</b>가 각 <b>${maxBrandCount}회</b>로 가장 자주 반복 등장했습니다.`);
+    }
 
     const m = D.methodology || {};
     const mEl = document.getElementById('method-note');
@@ -74,13 +72,68 @@
     const max = Math.max(...(S.sourceStats || []).map(s => s.totalListed), 1);
     wrap.innerHTML = (S.sourceStats || []).map(s => `
       <div class="sbar" data-count="${s.totalListed}">
-        <b>${labelOf(s.source)}</b>
+        <b><span class="ch-dot ${chDot(s.source)}"></span>${labelOf(s.source)}</b>
         <div class="track"><div class="fill ${fillClass(s.source)}" data-w="${(s.totalListed / max) * 100}"></div></div>
         <span class="val">${s.totalListed}개</span>
       </div>`).join('');
   }
   const labelOf = (s) => ({ Coupang: '쿠팡', Danawa: '다나와', NaverShopping: '네이버쇼핑' }[s] || s);
   const fillClass = (s) => ({ Coupang: 'fill-cp', Danawa: 'fill-dn', NaverShopping: 'fill-nv' }[s] || '');
+  const chDot = (s) => ({ Coupang: 'ch-cp', Danawa: 'ch-dn', NaverShopping: 'ch-nv' }[s] || '');
+
+  /* ---------- cleaning flow (원본 → 제외 → 분석) ---------- */
+  function buildCleanFlow() {
+    const el = document.getElementById('clean-flow');
+    if (!el) return;
+    const m = D.methodology || {};
+    if (!m.originalCount) { el.style.display = 'none'; return; }
+    el.innerHTML = `
+      <div class="cf-node"><b>${m.originalCount}</b><span>원본 수집</span></div>
+      <span class="cf-arrow">→</span>
+      <div class="cf-node cf-drop"><b>−${m.excludedCount}</b><span>무관 항목 제외</span></div>
+      <span class="cf-arrow">→</span>
+      <div class="cf-node cf-final"><b>${m.analysisCount}</b><span>최종 분석</span></div>
+      <span class="cf-note">가격 확인 ${m.pricedCount}건 · 단백질 무관·반려동물용 제외</span>`;
+  }
+
+  /* ---------- insights (visual statements) ---------- */
+  function buildInsights() {
+    const grid = document.getElementById('insight-grid');
+    if (!grid) return;
+    const cheap = S.cheapest, pricey = S.priciest, mr = S.mostReviewed;
+    const byAvg = [...(S.sourceStats || [])].filter(s => s.avg).sort((a, b) => a.avg - b.avg);
+    const loAvg = byAvg[0], hiAvg = byAvg[byAvg.length - 1];
+    const top = (S.brands && S.brands[0]) || null;
+
+    const spread = (cheap && pricey) ? Math.round(((pricey.price - cheap.price) / cheap.price) * 100) : null;
+    const gap = (hiAvg && loAvg) ? hiAvg.avg - loAvg.avg : null;
+
+    const cards = [];
+    if (spread != null) cards.push({
+      metric: `${spread}%`, label: '가격 양극화',
+      detail: `${krw(cheap.price)} ~ ${krw(pricey.price)} · 최저 “${esc(cheap.name)}”`
+    });
+    if (gap != null) cards.push({
+      metric: krw(gap), label: '채널 단가 차',
+      detail: `${labelOf(hiAvg.source)} ${krw(hiAvg.avg)} vs ${labelOf(loAvg.source)} ${krw(loAvg.avg)}`
+    });
+    if (top) cards.push({
+      metric: `${top.count}회`, label: '브랜드 쏠림',
+      detail: `“${esc(top.brand)}” 최다 반복 노출 · 평균 ${krw(top.avg)}`
+    });
+    if (mr) cards.push({
+      metric: Number(mr.reviews).toLocaleString('ko-KR'), label: '검증된 인기',
+      detail: `“${esc(mr.name)}” 리뷰 수 1위`
+    });
+
+    grid.innerHTML = cards.map((c, i) => `
+      <div class="insight-card">
+        <span class="i-idx">0${i + 1}</span>
+        <div class="i-metric">${c.metric}</div>
+        <div class="i-label">${c.label}</div>
+        <div class="i-detail">${c.detail}</div>
+      </div>`).join('');
+  }
 
   /* ---------- leaderboards ---------- */
   function buildBoards() {
@@ -89,25 +142,34 @@
     const rev = [...items].filter(i => i.reviews).sort((a, b) => b.reviews - a.reviews).slice(0, 5);
 
     const cheapEl = document.getElementById('cheap-list');
-    if (cheapEl) cheapEl.innerHTML = cheap.map((it, i) => rankLi(i, it.name, krw(it.price), it.price)).join('');
+    if (cheapEl) cheapEl.innerHTML = cheap.map((it, i) => rankLi(i, it.name, krw(it.price), it.price, it.source)).join('');
     const revEl = document.getElementById('review-list');
     const maxRev = Math.max(...rev.map(r => r.reviews), 1);
-    if (revEl) revEl.innerHTML = rev.map((it, i) => rankLi(i, it.name, Number(it.reviews).toLocaleString('ko-KR') + '개', (it.reviews / maxRev) * 100)).join('');
+    if (revEl) revEl.innerHTML = rev.map((it, i) => rankLi(i, it.name, Number(it.reviews).toLocaleString('ko-KR') + '개', (it.reviews / maxRev) * 100, it.source)).join('');
   }
-  function rankLi(i, name, val, w) {
+  function rankLi(i, name, val, w, source) {
     return `<li><div class="rl-fill" data-w="${w}"></div>
-      <div class="rl-row"><span class="rl-name"><span class="rank-badge">${i + 1}</span>${esc(name)}</span>
+      <div class="rl-row"><span class="rl-name"><span class="rank-badge">${i + 1}</span><span class="rl-dot ${chDot(source)}"></span>${esc(name)}</span>
       <span class="rl-val">${val}</span></div></li>`;
   }
   const esc = (s) => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
 
   /* ---------- bucket legend ---------- */
   const BUCKET_COLORS = ['#38bdf8', '#5eead4', '#b6ff3d', '#fbbf24', '#ff4d5e'];
+  const BUCKET_RANGES = [[0, 20000], [20000, 30000], [30000, 40000], [40000, 60000], [60000, Infinity]];
+  function medianBucketIndex(med) {
+    if (med == null) return -1;
+    return BUCKET_RANGES.findIndex(([lo, hi]) => med >= lo && med < hi);
+  }
   function buildBucketLegend() {
     const el = document.getElementById('bucket-legend');
     if (!el) return;
+    const medIdx = medianBucketIndex(S.medianPrice);
     el.innerHTML = (S.priceBuckets || []).map((b, i) =>
-      `<li><span><span class="swatch" style="background:${BUCKET_COLORS[i % BUCKET_COLORS.length]}"></span>${b.label}</span><span class="num">${b.count}개</span></li>`
+      `<li class="${i === medIdx ? 'is-median' : ''}">
+        <span><span class="swatch" style="background:${BUCKET_COLORS[i % BUCKET_COLORS.length]}"></span>${b.label}${i === medIdx ? '<span class="tag-median">중앙값</span>' : ''}</span>
+        <span class="num">${b.count}개</span>
+      </li>`
     ).join('');
   }
 
@@ -185,6 +247,21 @@
     }, extra || {});
   }
 
+  const avgValueLabels = {
+    id: 'avgValueLabels',
+    afterDatasetsDraw(chart) {
+      const { ctx } = chart;
+      ctx.save();
+      ctx.fillStyle = '#eef3ff';
+      ctx.font = '700 14px Pretendard, sans-serif';
+      ctx.textAlign = 'center';
+      chart.getDatasetMeta(0).data.forEach((bar, i) => {
+        ctx.fillText(krw(chart.data.datasets[0].data[i]), bar.x, bar.y - 10);
+      });
+      ctx.restore();
+    }
+  };
+
   function makeChart(id) {
     if (created[id]) return;
     const el = document.getElementById(id);
@@ -196,6 +273,7 @@
     if (id === 'chart-avg') {
       created[id] = new Chart(el, {
         type: 'bar',
+        plugins: [avgValueLabels],
         data: {
           labels,
           datasets: [{
@@ -218,24 +296,59 @@
     }
 
     if (id === 'chart-range') {
+      const medians = stats.map(s => s.median);
+      const medianMarker = {
+        id: 'medianMarker',
+        afterDatasetsDraw(chart) {
+          const { ctx, scales } = chart;
+          ctx.save();
+          medians.forEach((m, i) => {
+            if (m == null) return;
+            const px = scales.x.getPixelForValue(m);
+            const py = scales.y.getPixelForValue(i);
+            ctx.beginPath();
+            ctx.arc(px, py, 7, 0, Math.PI * 2);
+            ctx.fillStyle = '#b6ff3d';
+            ctx.strokeStyle = 'rgba(7,10,18,.9)';
+            ctx.lineWidth = 3;
+            ctx.fill(); ctx.stroke();
+            ctx.fillStyle = '#b6ff3d';
+            ctx.font = '700 11px Pretendard, sans-serif';
+            ctx.textAlign = 'center';
+            ctx.fillText('중앙값', px, py - 13);
+          });
+          ctx.restore();
+        }
+      };
       created[id] = new Chart(el, {
         type: 'bar',
+        plugins: [medianMarker],
         data: {
           labels,
-          datasets: [
-            { label: '최저', data: stats.map(s => s.min), backgroundColor: 'rgba(56,189,248,.85)', borderRadius: 8, maxBarThickness: 34 },
-            { label: '중앙값', data: stats.map(s => s.median), backgroundColor: 'rgba(182,255,61,.9)', borderRadius: 8, maxBarThickness: 34 },
-            { label: '최고', data: stats.map(s => s.max), backgroundColor: 'rgba(255,77,94,.85)', borderRadius: 8, maxBarThickness: 34 }
-          ]
+          datasets: [{
+            label: '가격 레인지',
+            data: stats.map(s => [s.min, s.max]),
+            backgroundColor: colors.map(c => c + '99'),
+            borderColor: colors,
+            borderWidth: 1.5,
+            borderRadius: 8,
+            borderSkipped: false,
+            maxBarThickness: 46,
+            barPercentage: .6
+          }]
         },
         options: baseOptions({
+          indexAxis: 'y',
           plugins: {
-            legend: { labels: { color: '#cfd9f5' } },
-            tooltip: { callbacks: { label: (c) => ` ${c.dataset.label}: ${krw(c.raw)}` }, backgroundColor: 'rgba(10,14,26,.95)', padding: 12, cornerRadius: 10, titleColor: '#fff', bodyColor: '#cfd9f5' }
+            legend: { display: false },
+            tooltip: {
+              callbacks: { label: (c) => ` ${krw(c.raw[0])} ~ ${krw(c.raw[1])}` },
+              backgroundColor: 'rgba(10,14,26,.95)', padding: 12, cornerRadius: 10, titleColor: '#fff', bodyColor: '#cfd9f5'
+            }
           },
           scales: {
-            x: { ticks: { color: '#cfd9f5', font: { weight: '600' } }, grid: { display: false } },
-            y: { ticks: { color: '#95a2c4', callback: v => (v / 10000) + '만' }, grid: { color: 'rgba(255,255,255,.06)' } }
+            x: { ticks: { color: '#95a2c4', callback: v => (v / 10000) + '만' }, grid: { color: 'rgba(255,255,255,.06)' } },
+            y: { ticks: { color: '#cfd9f5', font: { weight: '600' } }, grid: { display: false } }
           }
         })
       });
@@ -315,7 +428,7 @@
         data: {
           datasets: Object.keys(bySrc).map(src => ({
             label: labelOf(src),
-            data: bySrc[src].map(i => ({ x: i.reviews, y: i.rating, r: 8, _n: i.name })),
+            data: bySrc[src].map(i => ({ x: i.reviews, y: i.rating, r: Math.max(6, 5 + (i.rating - 4) * 12), _n: i.name })),
             backgroundColor: COLORS[src] + 'aa',
             borderColor: COLORS[src],
             borderWidth: 1.5
@@ -382,12 +495,15 @@
     const kind = section.dataset ? section.dataset.slide : null;
     if (kind === 'title') animateTitleArt();
     if (kind === 'board') staggerList(section, '.rank-list li');
+    if (kind === 'insight') staggerList(section, '.insight-card');
   }
 
   /* ---------- init ---------- */
   fillStatic();
+  buildCleanFlow();
   buildSourceBars();
   buildBoards();
+  buildInsights();
   buildBucketLegend();
 
   Chart.defaults.font.family = 'Pretendard, sans-serif';
