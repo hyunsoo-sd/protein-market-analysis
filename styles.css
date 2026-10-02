@@ -35,7 +35,8 @@ body{
 @keyframes float2{50%{transform:translate(-140px,-70px) scale(1.15)}}
 @keyframes float3{50%{transform:translate(-90px,120px) scale(.9)}}
 
-.reveal{position:relative;z-index:1}
+.reveal{position:relative;z-index:1;color:var(--ink)}
+.reveal-viewport,.reveal{background:transparent !important;background-color:transparent !important}
 .reveal .slides{text-align:left}
 .reveal .slides section{height:100%;padding:42px 64px}
 .reveal .progress{color:var(--accent);height:4px}
@@ -104,9 +105,9 @@ body{
 .range-median b{font-size:.72rem;color:var(--accent)}
 
 /* ---------- CHART ---------- */
-.chart-wrap{position:relative;height:60vh;min-height:320px;background:var(--card);border:1px solid var(--line);
+.chart-wrap{position:relative;height:440px;background:var(--card);border:1px solid var(--line);
   border-radius:var(--radius);padding:16px}
-.chart-wrap.small{height:56vh}
+.chart-wrap.small{height:400px}
 .bucket-layout{display:grid;grid-template-columns:1.2fr .8fr;gap:26px;align-items:stretch}
 .bucket-legend{list-style:none;margin:0;padding:8px 0;display:flex;flex-direction:column;gap:14px;justify-content:center}
 .bucket-legend li{display:flex;justify-content:space-between;align-items:center;font-size:1rem;border-bottom:1px dashed var(--line);padding-bottom:10px}
