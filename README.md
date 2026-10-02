@@ -4,14 +4,16 @@
 
 ## Live
 
-- GitHub Pages: 발행 후 Actions/Pages에서 확인
+- GitHub Pages: https://hyunsoo-sd.github.io/protein-market-analysis/
 
 ## 구성
 
 - `index.html` — reveal.js 기반 슬라이드 덱 (11 슬라이드)
 - `styles.css` — 다크 테마, 오브 애니메이션, 카운트업/바 애니메이션
-- `deck.js` — Chart.js 차트(평균가·가격레인지·가격대 도넛·브랜드·평점/리뷰 버블) 및 애니메이션
+- `deck.js` — Chart.js 차트(평균가·가격레인지·가격대 도넛·브랜드·평점/리뷰 버블) + anime.js 모션
 - `data.json` / `data.js` — 수집·분석 결과 (원본 CSV: 상위 디렉터리 `protein_products.csv`)
+- `assets/img/` — 16:9 이미지 플레이스홀더 (교체 방법은 `IMAGE_REQUIREMENTS.md`)
+- `IMAGE_REQUIREMENTS.md` — Google Flow 이미지 에셋 요구사항 및 교체 가이드
 
 ## 데이터 수집
 
