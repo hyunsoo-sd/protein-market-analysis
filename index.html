@@ -20,7 +20,30 @@
 
   <!-- 1. TITLE -->
   <section class="slide slide-title" data-slide="title">
-    <div class="title-hero" id="hero-art" data-img="assets/img/hero.png" aria-hidden="true"></div>
+    <div class="title-hero" id="hero-art" data-img="assets/img/hero.svg" aria-hidden="true"></div>
+    <svg class="title-art" id="title-art" viewBox="0 0 400 400" aria-hidden="true">
+      <defs>
+        <linearGradient id="chainGrad" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stop-color="#b6ff3d" />
+          <stop offset="55%" stop-color="#7c5cff" />
+          <stop offset="100%" stop-color="#38bdf8" />
+        </linearGradient>
+        <radialGradient id="nodeGrad" cx="35%" cy="30%" r="75%">
+          <stop offset="0%" stop-color="#eaffc9" />
+          <stop offset="100%" stop-color="#7c5cff" />
+        </radialGradient>
+      </defs>
+      <path id="chain-path" d="M50,300 C80,250 90,225 110,220 S150,270 170,260 S210,170 230,150 S270,210 290,200 S320,130 340,110"
+            fill="none" stroke="url(#chainGrad)" stroke-width="4" stroke-linecap="round" />
+      <g id="chain-nodes" fill="url(#nodeGrad)">
+        <circle cx="50" cy="300" r="13" />
+        <circle cx="110" cy="220" r="13" />
+        <circle cx="170" cy="260" r="13" />
+        <circle cx="230" cy="150" r="13" />
+        <circle cx="290" cy="200" r="13" />
+        <circle cx="340" cy="110" r="13" />
+      </g>
+    </svg>
     <div class="title-inner">
       <p class="kicker reveal-up" style="animation-delay:.05s">PROTEIN MARKET DATA REPORT</p>
       <h1 class="title-main reveal-up" style="animation-delay:.15s">프로틴 시장<br /><span class="grad">가격 분석</span></h1>
@@ -150,7 +173,7 @@
 
   <!-- 11. CLOSING -->
   <section class="slide slide-end" data-slide="end">
-    <div class="end-art" id="end-art" data-img="assets/img/outro.png" aria-hidden="true"></div>
+    <div class="end-art" id="end-art" data-img="assets/img/outro.svg" aria-hidden="true"></div>
     <h2 class="h2">정리</h2>
     <p class="lead end-lead">“프로틴” 시장은 <b>저가 실속형</b>과 <b>고가 프리미엄</b>이 뚜렷하게 나뉘고, 채널별 가격 차가 큽니다.</p>
     <div class="src-cards">
@@ -165,6 +188,7 @@
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/animejs@3.2.2/lib/anime.min.js"></script>
 <script src="data.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.js"></script>
 <script src="deck.js"></script>

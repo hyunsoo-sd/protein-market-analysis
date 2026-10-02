@@ -346,6 +346,38 @@
     section.querySelectorAll('.fill[data-w], .rl-fill[data-w]').forEach(f => { f.style.width = '0'; });
   }
 
+  /* ---------- anime.js enhancements ---------- */
+  function hasAnime() { return typeof anime === 'function'; }
+
+  function animateTitleArt() {
+    if (!hasAnime()) return;
+    const path = document.getElementById('chain-path');
+    if (path) {
+      path.style.strokeDashoffset = '1200';
+      anime({ targets: path, strokeDashoffset: [1200, 0], duration: 1700, easing: 'easeInOutQuad' });
+    }
+    const nodes = document.querySelectorAll('#chain-nodes circle');
+    if (nodes.length) {
+      anime.remove(nodes);
+      anime({ targets: nodes, opacity: [0, 1], scale: [0, 1], duration: 700, easing: 'easeOutBack', delay: anime.stagger(130, { start: 500 }) });
+    }
+  }
+
+  function staggerList(section, selector) {
+    if (!hasAnime()) return;
+    const els = section.querySelectorAll(selector);
+    if (!els.length) return;
+    anime.remove(els);
+    anime({ targets: els, translateX: [28, 0], opacity: [0, 1], duration: 620, easing: 'easeOutCubic', delay: anime.stagger(70) });
+  }
+
+  function animateSection(section) {
+    if (!section) return;
+    const kind = section.dataset ? section.dataset.slide : null;
+    if (kind === 'title') animateTitleArt();
+    if (kind === 'board') staggerList(section, '.rank-list li');
+  }
+
   /* ---------- init ---------- */
   fillStatic();
   buildSourceBars();
@@ -370,11 +402,11 @@
 
   deck.initialize().then(() => {
     const cur = deck.getCurrentSlide();
-    runCounts(cur); runRange(); initChartsIn(cur);
+    runCounts(cur); runRange(); initChartsIn(cur); animateSection(cur);
 
     deck.on('slidechanged', (e) => {
       if (e.previousSlide) destroyChartsIn(e.previousSlide);
-      runCounts(e.currentSlide); runRange(); initChartsIn(e.currentSlide);
+      runCounts(e.currentSlide); runRange(); initChartsIn(e.currentSlide); animateSection(e.currentSlide);
     });
   });
 

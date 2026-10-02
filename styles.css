@@ -62,6 +62,10 @@ html.reveal-full-page{background:var(--bg) !important}
   background-image:linear-gradient(rgba(255,255,255,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.04) 1px,transparent 1px);
   background-size:44px 44px;mask-image:radial-gradient(circle at 70% 40%,#000,transparent 70%)}
 @keyframes fadeIn{to{opacity:1}}
+.title-art{position:absolute;right:-40px;top:50%;transform:translateY(-50%);width:560px;height:560px;
+  opacity:.9;z-index:0;pointer-events:none;filter:drop-shadow(0 20px 60px rgba(124,92,255,.35))}
+#chain-path{stroke-dasharray:1200;stroke-dashoffset:1200}
+#chain-nodes circle{transform-box:fill-box;transform-origin:center;opacity:0}
 .title-inner{position:relative;z-index:1;max-width:900px}
 .kicker{letter-spacing:.42em;font-size:.72rem;font-weight:700;color:var(--accent);margin:0 0 1rem}
 .title-main{font-size:4.6rem;line-height:1.02;font-weight:900;margin:0;letter-spacing:-.03em;
@@ -122,14 +126,15 @@ html.reveal-full-page{background:var(--bg) !important}
 
 /* ---------- LEADERBOARD ---------- */
 .board-grid{display:grid;grid-template-columns:1fr 1fr;gap:30px}
+.board{min-width:0}
 .board h3{font-size:1.1rem;margin:0 0 1rem}
 .board h3 small{color:var(--muted);font-weight:500;font-size:.8rem;margin-left:6px}
 .rank-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:12px}
 .rank-list li{position:relative;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 14px;overflow:hidden}
 .rank-list li .rl-fill{position:absolute;inset:0;width:0;background:linear-gradient(90deg,rgba(182,255,61,.18),transparent);transition:width 1s cubic-bezier(.2,.8,.2,1)}
-.rank-list li .rl-row{position:relative;display:flex;justify-content:space-between;align-items:baseline;gap:12px}
-.rank-list .rl-name{font-weight:600;font-size:.92rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.rank-list .rl-val{font-weight:800;color:var(--accent);white-space:nowrap}
+.rank-list li .rl-row{position:relative;display:flex;justify-content:space-between;align-items:baseline;gap:12px;min-width:0}
+.rank-list .rl-name{font-weight:600;font-size:.92rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0;flex:1 1 auto}
+.rank-list .rl-val{font-weight:800;color:var(--accent);white-space:nowrap;flex:0 0 auto;font-variant-numeric:tabular-nums}
 .rank-list .rank-badge{display:inline-block;width:22px;height:22px;line-height:22px;text-align:center;border-radius:7px;background:rgba(255,255,255,.08);font-size:.75rem;font-weight:700;margin-right:8px;flex:0 0 auto}
 
 /* ---------- INSIGHTS ---------- */
@@ -163,4 +168,5 @@ html.reveal-full-page{background:var(--bg) !important}
   .bucket-layout{grid-template-columns:1fr}
   .title-main{font-size:3rem}
   .footnote{left:26px;right:26px}
+  .title-art{display:none}
 }
