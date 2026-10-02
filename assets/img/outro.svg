@@ -1,22 +1,20 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 1080" width="1920" height="1080" role="img" aria-label="Outro image placeholder 16:9">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 1080" width="1920" height="1080" role="img" aria-label="Outro background placeholder 16:9">
   <defs>
-    <linearGradient id="og" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0%" stop-color="#03c75a" stop-opacity=".5" />
-      <stop offset="100%" stop-color="#38bdf8" stop-opacity=".5" />
-    </linearGradient>
+    <radialGradient id="og1" cx="82%" cy="58%" r="62%">
+      <stop offset="0%" stop-color="#03c75a" stop-opacity=".16" />
+      <stop offset="100%" stop-color="#03c75a" stop-opacity="0" />
+    </radialGradient>
+    <radialGradient id="og2" cx="60%" cy="30%" r="55%">
+      <stop offset="0%" stop-color="#7c5cff" stop-opacity=".16" />
+      <stop offset="100%" stop-color="#7c5cff" stop-opacity="0" />
+    </radialGradient>
   </defs>
-  <rect x="16" y="16" width="1888" height="1048" fill="none" stroke="url(#og)" stroke-width="2" stroke-dasharray="14 12" opacity=".5" rx="24" />
-  <g fill="none" stroke="url(#og)" stroke-width="3" opacity=".35">
-    <path d="M1200,760 C1400,600 1560,820 1840,560" stroke-linecap="round" />
-    <circle cx="1200" cy="760" r="20" />
-    <circle cx="1840" cy="560" r="20" />
-  </g>
-  <text x="960" y="520" text-anchor="middle" fill="#cfe0ff" fill-opacity=".55"
-        font-family="Pretendard, sans-serif" font-size="42" font-weight="800" letter-spacing="6">
-    OUTRO IMAGE · 16:9
-  </text>
-  <text x="960" y="578" text-anchor="middle" fill="#9aa8cc" fill-opacity=".7"
-        font-family="Pretendard, sans-serif" font-size="24" font-weight="500" letter-spacing="2">
-    REPLACE → assets/img/outro.(png|webp) · generated via Google Flow
+  <rect width="1920" height="1080" fill="url(#og2)" />
+  <rect width="1920" height="1080" fill="url(#og1)" />
+  <rect x="28" y="28" width="1864" height="1024" fill="none" stroke="#03c75a" stroke-opacity=".14"
+        stroke-width="2" stroke-dasharray="10 16" rx="28" />
+  <text x="1888" y="1046" text-anchor="end" fill="#8b93b5" fill-opacity=".5"
+        font-family="Pretendard, sans-serif" font-size="18" font-weight="600" letter-spacing="2">
+    OUTRO 16:9 placeholder · replace with assets/img/outro.png
   </text>
 </svg>
